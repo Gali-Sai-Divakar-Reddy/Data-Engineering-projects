@@ -1,1 +1,1 @@
-![Spotify ETL Data Pipeline](images/spotify_AWS_ETL_pipeline)
+![Spotify ETL Data Pipeline](images/Spotify_AWS_ETL_Pipeline.jpeg)
