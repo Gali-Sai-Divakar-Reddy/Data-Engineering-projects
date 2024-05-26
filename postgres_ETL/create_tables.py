@@ -1,5 +1,31 @@
 import psycopg2
+import configparser
 from sql_queries import create_table_queries, drop_table_queries
+
+def read_config():
+    # Create a ConfigParser object
+    config = configparser.ConfigParser()
+ 
+    # Read the configuration file
+    config.read('config.ini')
+ 
+    # Access values from the configuration file
+    db_host = config.get('Database', 'hostname')
+    db_name = config.get('Database', 'database')
+    db_username = config.get('Database', 'username')
+    db_pwd = config.get('Database', 'pwd')
+    db_port = config.get('Database', 'port_id')
+ 
+    # Return a dictionary with the retrieved values
+    config_values = {
+        'db_name': db_name,
+        'db_host': db_host,
+        'db_username': db_username,
+        'db_pwd': db_pwd,
+        'db_port': db_port
+    }
+ 
+    return config_values
 
 def create_database():
     """
