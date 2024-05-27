@@ -72,17 +72,21 @@ def create_database():
 
     return cur, conn
 
-def drop_tables():
+def drop_tables(cur, conn):
     """
     Drops each table using the queries in `drop_table_queries` list.
     """
-    pass
+    for query in drop_table_queries:
+        cur.execute(query)
+        conn.commit()
 
-def create_tables():
+def create_tables(cur, conn):
     """
     Creates each table using the queries in `create_table_queries` list. 
     """
-    pass
+    for query in create_table_queries:
+        cur.execute(query)
+        conn.commit()
 
 def main():
     """
@@ -99,6 +103,10 @@ def main():
     """
 
     cur, conn = create_database()
+
+    drop_tables(cur, conn)
+    create_tables(cur, conn)
+    conn.close()
 
 if __name__ == "__main__":
     main()
