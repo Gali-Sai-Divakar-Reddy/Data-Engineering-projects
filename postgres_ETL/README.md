@@ -1,4 +1,4 @@
-# Sparkify ETL Pipeline
+# Sparkify ETL Pipeline using PostgresSQL and psycopg2
 
 ## Project Overview
 
