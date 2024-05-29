@@ -61,6 +61,7 @@ def extract_data_from_file(db, filepath, func):
     for i, datafile in enumerate(all_files,1):
         func(db.cur, datafile)
         db.conn.commit()
+        print('{}/{} files processed.'.format(i, num_files))
 
 def process_song_data(cur, df):
     pass
@@ -72,6 +73,9 @@ def transform_song_data():
     pass
 
 def transform_log_data():
+    pass
+
+def load_data():
     pass
 
 def main():
