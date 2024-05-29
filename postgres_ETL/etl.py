@@ -69,7 +69,7 @@ def transform_song_data(cur, datafile):
     song_data = list(df[['song_id', 'title', 'artist_id', 'year', 'duration']].values[0])
     artist_data = list(df[['artist_id', 'artist_name', 'artist_location',
                        'artist_latitude', 'artist_longitude']].values[0])
-    load_data(cur, song_data, artist_data, None, None, None)
+    load_song_data(cur, song_data, artist_data)
 
 def transform_log_data(cur, datafile):
 
@@ -90,12 +90,15 @@ def transform_log_data(cur, datafile):
     user_df = log_df[['userId', 'firstName', 'lastName', 'gender', 'level']]
 
     # Load time data, user data, and songplay data
-    load_data(cur, None, None, time_df, user_df, log_df)
+    load_log_data(cur,time_df, user_df, log_df)
 
-def load_data(cur, song_data, artist_data, time_df, user_df, log_df):
+def load_song_data(cur, song_data, artist_data):
     if song_data and artist_data:
         cur.execute(song_table_insert, song_data)
         cur.execute(artist_table_insert, artist_data)
+
+def load_log_data(cur, time_df, user_df, log_df):
+    
     if not time_df.empty:
         for _, row in time_df.iterrows():
             cur.execute(time_table_insert, list(row))
