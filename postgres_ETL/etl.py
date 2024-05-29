@@ -46,16 +46,48 @@ class Database:
     def close(self):
         self.conn.close()
 
-def extract_data():
+def extract_data_from_file(db, filepath, func):
+    all_files = []
+    for root, dirs, files in os.walk(filepath):
+        files = glob.glob(os.path.join(root, '*.json'))
+        for f in files:
+            all_files.append(os.path.abspath(f))
+
+    # get total number of files found
+    num_files = len(all_files)
+    print('{} files found in {}'.format(num_files, filepath))
+
+    # iterate over files and process
+    for i, datafile in enumerate(all_files,1):
+        func(db.cur, datafile)
+        db.conn.commit()
+
+def process_song_data(cur, df):
     pass
 
-def transform_data():
+def process_log_data(cur, df):
     pass
 
+def transform_song_data():
+    pass
+
+def transform_log_data():
+    pass
 
 def main():
-    config_data = read_config()
-    db = Database(config_data)
+    db = None
+    try:
+        config_data = read_config()
+        db = Database(config_data)
+        extract_data_from_file(db, filepath='data/song_data', func=process_song_data)
+        extract_data_from_file(db, filepath='data/log_data',func=process_log_data)
+        print("ETL process completed successfully.")
+    except Exception as e:
+        print(f"An error occurred during the ETL process: {e}")
+    finally:
+        if db:
+            db.close()
+            print("Database connection closed.")
 
 
 if __name__ == "__main__":
