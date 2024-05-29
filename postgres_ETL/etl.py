@@ -32,8 +32,31 @@ def read_config():
  
     return config_values
 
-def main():
+class Database:
+    def __init__(self, config_data):
+        self.conn = psycopg2.connect(
+            host= config_data['db_host'],
+            dbname = config_data['db_name'],
+            user = config_data['db_username'],
+            password = config_data['db_pwd'],
+            port = config_data['db_port']
+        )
+        self.cur = self.conn.cursor()
+
+    def close(self):
+        self.conn.close()
+
+def extract_data():
     pass
+
+def transform_data():
+    pass
+
+
+def main():
+    config_data = read_config()
+    db = Database(config_data)
+
 
 if __name__ == "__main__":
     main()
