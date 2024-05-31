@@ -1,4 +1,6 @@
-# Sparkify ETL Pipeline using PostgresSQL and psycopg2
+# Sparkify ETL Pipeline using PostgresSQL and 
+
+![architecture-Diagram](postgres_ETL_architecture.png)
 
 ## Project Overview
 
@@ -26,6 +28,8 @@ postgres_ETL/
 ```
 
 ## Database Schema
+
+![Schema](postgres_ETL_Schema.jpeg)
 
 The database uses a star schema optimized for queries on song play analysis. This schema includes the following tables:
 
