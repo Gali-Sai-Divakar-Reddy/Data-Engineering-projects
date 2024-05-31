@@ -1,4 +1,4 @@
-# Sparkify ETL Pipeline using PostgresSQL and 
+# Sparkify ETL Pipeline using PostgresSQL and psycopg2
 
 ![architecture-Diagram](postgres_ETL_architecture.png)
 
