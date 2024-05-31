@@ -1,10 +1,10 @@
-# Sparkify ETL Pipeline using PostgresSQL and psycopg2
+# ETL Pipeline using PostgresSQL and psycopg2
 
 ![architecture-Diagram](postgres_ETL_architecture.png)
 
 ## Project Overview
 
-The Sparkify ETL pipeline is designed to extract, transform, and load data from JSON logs and metadata files into a structured PostgreSQL database. This process enables analytical capabilities for understanding user activity and song play metrics on the Sparkify music streaming platform. The project processes two types of data sources:
+The ETL pipeline is designed to extract, transform, and load data from JSON logs and metadata files into a structured PostgreSQL database. This process enables analytical capabilities for understanding user activity and song play metrics on the music streaming platform. The project processes two types of data sources:
 
  - Song Data: Metadata about songs and artists.
  - Log Data: User activity logs detailing song plays.
