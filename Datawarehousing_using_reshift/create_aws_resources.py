@@ -27,8 +27,9 @@ def read_config():
     VPC_ID = config.get('AWS', 'VPC_ID')
     NAME= config.get('SECURITY_GROUP', 'NAME')
     DESCRIPTION=config.get('SECURITY_GROUP', 'DESCRIPTION')
-    PORT=config.get('SECURITY_GROUP', 'PORT')
+    PORT=config.getint('SECURITY_GROUP', 'PORT')
     IP_RANGE=config.get('SECURITY_GROUP', 'IP_RANGE')
+    DWH_IAM_ROLE_NAME=config.get('DWH', 'DWH_IAM_ROLE_NAME')
  
     # Return a dictionary with the retrieved values
     config_values = {
@@ -38,7 +39,8 @@ def read_config():
         'NAME': NAME,
         'DESCRIPTION':DESCRIPTION,
         'PORT': PORT,
-        'IP_RANGE': IP_RANGE
+        'IP_RANGE': IP_RANGE,
+        'DWH_IAM_ROLE_NAME': DWH_IAM_ROLE_NAME
     }
  
     return config_values
@@ -92,9 +94,30 @@ def create_security_group(ec2_client, config_data):
     
     return security_group_id
 
-def create_DWH_IAM_Role():
+def create_DWH_IAM_Role(iam_client, config_data):
     #create Iam role which Allows Redshift cluster to call AWS service on your behalf and give amazon s3 full access attach policy.
-    pass
+    try:
+        logger.info('Creating a new IAM Role')
+        dwh_role = iam_client.create_role(
+            Path='/',
+            RoleName=config_data['DWH_IAM_ROLE_NAME'],
+            Description='Allows Redshift cluster to call AWS service on your behalf.',
+            AssumeRolePolicyDocument=json.dumps(
+                {'Statement': [{'Action': 'sts:AssumeRole',
+                            'Effect': 'Allow', 
+                            'Principal': {'Service': 'redshift.amazonaws.com'}}],
+                'Version': '2012-10-17'})
+        )
+        # Attach Policy
+        iam_client.attach_role_policy(RoleName=config_data['DWH_IAM_ROLE_NAME'],
+                                      PolicyArn="arn:aws:iam::aws:policy/AmazonS3FullAccess"
+                                      )['ResponseMetadata']['HTTPStatusCode']
+        role_arn = iam_client.get_role(RoleName=config_data['DWH_IAM_ROLE_NAME'])['Role']['Arn']
+        logger.info(f'IAM Role ARN: {role_arn}')
+        return role_arn
+    except ClientError as e:
+        logger.error(f'Error creating IAM Role: {e}')
+        return None
 
 def main():
     config_data = read_config()
@@ -105,7 +128,7 @@ def main():
                           aws_secret_access_key=config_data['SECRET'])
     
     # Create the IAM role
-    iam = boto3.client('iam',
+    iam_client = boto3.client('iam',
                        region_name='us-east-2',
                        aws_access_key_id=config_data['KEY'],
                        aws_secret_access_key=config_data['SECRET'])
@@ -115,6 +138,10 @@ def main():
         logger.error("Failed to create or retrieve security group")
         return
     # create_DWH_IAM_Role(iam)
+    role_arn = create_DWH_IAM_Role(iam_client, config_data)
+    if role_arn is None:
+        logger.error("Failed to create IAM Role")
+        return
 
 if __name__ == "__main__":
     main()
