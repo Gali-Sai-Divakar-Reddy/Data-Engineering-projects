@@ -24,10 +24,10 @@ def read_config():
         'DWH_CLUSTER_TYPE': config.get('DWH', 'DWH_CLUSTER_TYPE'),
         'DWH_NODE_TYPE': config.get('DWH', 'DWH_NODE_TYPE'),
         'DWH_NUM_NODES': config.getint('DWH', 'DWH_NUM_NODES'),
-        'DWH_DB_NAME': config.get('DWH', 'DWH_DB_NAME'),
+        'DWH_DB': config.get('DWH', 'DWH_DB'),
         'DWH_CLUSTER_IDENTIFIER': config.get('DWH', 'DWH_CLUSTER_IDENTIFIER'),
-        'DWH_MASTER_USERNAME': config.get('DWH', 'DWH_MASTER_USERNAME'),
-        'DWH_MASTER_USER_PASSWORD': config.get('DWH', 'DWH_MASTER_USER_PASSWORD'),
+        'DWH_DB_USER': config.get('DWH', 'DWH_DB_USER'),
+        'DWH_DB_PASSWORD': config.get('DWH', 'DWH_DB_PASSWORD'),
         'DWH_IAM_ROLE_NAME': config.get('DWH', 'DWH_IAM_ROLE_NAME')
     }
     return config_values
@@ -49,10 +49,10 @@ def create_redshift_cluster(redshift_client, iam_role_arn, config_data):
             ClusterType=config_data['DWH_CLUSTER_TYPE'],
             NodeType=config_data['DWH_NODE_TYPE'],
             NumberOfNodes=config_data['DWH_NUM_NODES'],
-            DBName=config_data['DWH_DB_NAME'],
+            DBName=config_data['DWH_DB'],
             ClusterIdentifier=config_data['DWH_CLUSTER_IDENTIFIER'],
-            MasterUsername=config_data['DWH_MASTER_USERNAME'],
-            MasterUserPassword=config_data['DWH_MASTER_USER_PASSWORD'],
+            MasterUsername=config_data['DWH_DB_USER'],
+            MasterUserPassword=config_data['DWH_DB_PASSWORD'],
             IamRoles=[iam_role_arn]
         )
         logger.info("Creating Redshift cluster. This might take a few minutes...")
