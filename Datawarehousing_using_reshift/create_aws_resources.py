@@ -4,6 +4,7 @@ import logging
 import configparser
 from botocore.exceptions import ClientError
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
